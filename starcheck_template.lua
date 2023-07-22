@@ -32,7 +32,7 @@ end
 
 function on_join(m)
     if type(_G.star_check_layouts) == "table" then
-        --change the "Your Mod Name" to the name of the romhack as stored in the main.lua --name parameter
+        --change the "Romhack" to the name of the romhack as stored in the main.lua --name parameter
         --also change the function name to something that fits your mod
         _G.star_check_layouts["Romhack"] = generate_modded_layout
         _G.star_check_max_pages = #pages
