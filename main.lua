@@ -5,8 +5,8 @@ local current_page = 1
 local display_multiple_pages = true
 
 local STAR_CHECK_SCALE = 0.75
-_G.pt = 15
-_G.rowHeight = 19
+local pt = 15
+local rowHeight = 19
 local function change_scale(msg) 
     if not tonumber(msg) then
         return false
@@ -32,6 +32,11 @@ local function render_page(pageNum,xOffset)
     scale = STAR_CHECK_SCALE
     if type(list_to_generate) == "table" then
         for _,v in pairs(list_to_generate) do
+            --has coordinates, so multiply them by their grid sizes
+            if v.x then
+                v.x = v.x * pt
+                v.y = v.y * rowHeight
+            end
             if v.type == "text" then
                 --font_menu should be smaller than the rest
                 if curr_font == FONT_MENU then
@@ -52,6 +57,12 @@ local function render_page(pageNum,xOffset)
             elseif v.type == "color" then
                 djui_hud_set_color(v.r,v.g,v.b,v.a)
             end
+        end
+        if (display_multiple_pages and star_check_max_pages > 2) or (not display_multiple_pages and star_check_max_pages > 1) then
+            djui_hud_set_font(FONT_MENU)
+            msg = "<- Page " .. current_page .. " ->"
+            textScale = scale/3
+            djui_hud_print_text(msg,djui_hud_get_screen_width()/2 - djui_hud_measure_text(msg)*textScale/2,rowHeight,textScale)
         end
     else
         djui_hud_set_font(FONT_MENU)
@@ -87,7 +98,7 @@ local function page_control(m)
             end
         else
             if current_page == 1 then
-                current_page = star_check_max_pages
+                current_page = _G.star_check_max_pages
             else
                 current_page = current_page - 1
             end
