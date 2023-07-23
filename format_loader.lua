@@ -1,4 +1,5 @@
 
+_G.star_check_layouts = {}
 local function format_number(number)
     local string = tostring(number)
     if number < 10 then
@@ -90,10 +91,6 @@ local function generate_vanilla_layout(pageNum)
 end
 
 
-
-
-_G.star_check_layouts = {}
-_G.star_check_max_pages = 2
 function find_romhack()
     for _,mods in pairs(gActiveMods) do
         if mods.incompatible == "romhack" then
@@ -101,13 +98,16 @@ function find_romhack()
         end
     end
 end
+
 ---@return table|string
 function load_format(pageNum)
     romhack = find_romhack()
     if not romhack then
+        set_max_pages(2)
         return generate_vanilla_layout(pageNum)
     elseif star_check_layouts[romhack] then
-        return star_check_layouts[romhack](pageNum)
+        set_max_pages(star_check_layouts[romhack].page_count)
+        return star_check_layouts[romhack].pages(pageNum)
     else
         return "STARCHECK UNAVAILABLE FOR ROMHACK"
     end

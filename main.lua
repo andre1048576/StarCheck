@@ -3,7 +3,7 @@
 
 local current_page = 1
 local display_multiple_pages = true
-
+local star_check_max_pages = -1
 local STAR_CHECK_SCALE = 0.75
 local pt = 15
 local rowHeight = 19
@@ -25,6 +25,10 @@ local function change_page_count()
         current_page = current_page - 1
     end
     return true
+end
+
+function set_max_pages(pages)
+    star_check_max_pages = pages
 end
 
 local function render_page(pageNum,xOffset)
@@ -88,17 +92,17 @@ end
 ---@param m MarioState
 local function page_control(m)
     if not is_game_paused() then confirm = 0 return end
-    if _G.star_check_max_pages == 1 then return end
+    if star_check_max_pages <= 1 then return end
     if m.controller.buttonPressed & L_JPAD ~= 0 then
         if display_multiple_pages then
             if current_page == 1 then
-                current_page = _G.star_check_max_pages - 1
+                current_page = star_check_max_pages - 1
             else
                 current_page = current_page - 1
             end
         else
             if current_page == 1 then
-                current_page = _G.star_check_max_pages
+                current_page = star_check_max_pages
             else
                 current_page = current_page - 1
             end
@@ -106,9 +110,9 @@ local function page_control(m)
     elseif m.controller.buttonPressed & R_JPAD ~= 0 then
         --increase by 1
         if display_multiple_pages then
-            current_page = current_page % (_G.star_check_max_pages-1) + 1
+            current_page = current_page % (star_check_max_pages-1) + 1
         else
-            current_page = current_page % _G.star_check_max_pages + 1
+            current_page = current_page % star_check_max_pages + 1
         end
     end
 end
