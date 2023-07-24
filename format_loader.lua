@@ -90,13 +90,18 @@ local function generate_vanilla_layout(pageNum)
     return pages[pageNum]()
 end
 
+---@type string
+local cached_romhack
 
 function find_romhack()
-    for _,mods in pairs(gActiveMods) do
-        if mods.incompatible == "romhack" then
-            return mods.name
+    if not cached_romhack then
+        for _,mods in pairs(gActiveMods) do
+            if mods.incompatible == "romhack" then
+                cached_romhack = mods.name
+            end
         end
     end
+    return cached_romhack
 end
 
 ---@return table|string
