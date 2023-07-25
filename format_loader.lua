@@ -100,7 +100,7 @@ function find_romhack()
 end
 
 ---@return table|string
-function load_format(pageNum)
+function load_pages(pageNum)
     romhack = find_romhack()
     if not romhack then
         set_max_pages(2)
@@ -114,3 +114,14 @@ function load_format(pageNum)
     --]]
 end
 
+function load_header(headerNum)
+    romhack = find_romhack()
+    if not romhack then
+        return nil
+    elseif star_check_layouts[romhack] then
+        if star_check_layouts[romhack].headers then
+            return star_check_layouts[romhack].headers(headerNum)
+        end
+    end
+    return nil
+end

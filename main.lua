@@ -19,18 +19,10 @@ local function change_scale(msg)
 end
 ---@param color table
 local function color_defaults(color)
-    if not color.r then
-        color.r = 255
-    end
-    if not color.g then
-        color.g = 255
-    end
-    if not color.b then
-        color.b = 255
-    end
-    if not color.a then
-        color.a = 255
-    end
+    color.r = color.r or 255
+    color.g = color.g or 255
+    color.b = color.b or 255
+    color.a = color.a or 255
     return color
 end
 
@@ -38,26 +30,26 @@ function set_max_pages(pages)
     star_check_max_pages = pages
 end
 
-local function render_text(v,xOffset)
+local function render_text(v,xOffset,yOffset)
     if v.color then
         c = color_defaults(v.color)
         djui_hud_set_color(c.r,c.g,c.b,c.a)
     end
     --font_menu should be smaller than the rest
     if curr_font == FONT_MENU then
-        djui_hud_print_text(v.text,v.x + xOffset,v.y,scale/3)
+        djui_hud_print_text(v.text,v.x + xOffset,v.y + yOffset,scale/3)
     else
-        djui_hud_print_text(v.text,v.x + xOffset,v.y,scale)
+        djui_hud_print_text(v.text,v.x + xOffset,v.y + yOffset,scale)
     end
     djui_hud_set_color(curr_color.r,curr_color.g,curr_color.b,curr_color.a)
 end
 
-local function render_star(v,xOffset)
+local function render_star(v,xOffset, yOffset)
     local starFlags = save_file_get_star_flags(get_current_save_file_num() - 1, v.course - 1)
     if (starFlags & (1 << v.star_num) ~= 0) then
-        djui_hud_render_texture(gTextures.star, xOffset + v.x, v.y, scale, scale)
+        djui_hud_render_texture(gTextures.star, xOffset + v.x, v.y + yOffset, scale, scale)
     else
-        djui_hud_print_text("x", v.x + xOffset, v.y, scale)
+        djui_hud_print_text("x", v.x + xOffset, v.y + yOffset, scale)
     end
 end
 
@@ -71,16 +63,21 @@ local function render_color(v)
     djui_hud_set_color(v.r,v.g,v.b,v.a)
 end
 
-local function render_rect(v)
+local function render_rect(v,xOffset,yOffset)
+    if v.color then
+        c = color_defaults(v.color)
+        djui_hud_set_color(c.r,c.g,c.b,c.a)
+    end
     v.width = v.width * pt * scale
     v.height = v.height * rowHeight * scale
-    djui_hud_render_rect(v.x, v.y,v.width,v.height)
+    djui_hud_render_rect(v.x + xOffset, v.y + yOffset,v.width,v.height)
+    djui_hud_set_color(curr_color.r,curr_color.g,curr_color.b,curr_color.a)
 end
 
 value_handler = {text = render_text,star = render_star,font = render_font,color = render_color,rect = render_rect}
 
 local function render_page(pageNum,xOffset)
-    list_to_generate = load_format(pageNum)
+    list_to_generate = load_pages(pageNum)
     if type(list_to_generate) == "table" then
         for _,v in pairs(list_to_generate) do
             --has coordinates, so multiply them by their grid sizes
@@ -88,7 +85,7 @@ local function render_page(pageNum,xOffset)
                 v.x = v.x * pt * scale
                 v.y = v.y * rowHeight * scale
             end
-            value_handler[v.type](v,xOffset)
+            value_handler[v.type](v,xOffset,0)
         end
         if star_check_max_pages > 2 then
             djui_hud_set_font(FONT_MENU)
@@ -99,6 +96,18 @@ local function render_page(pageNum,xOffset)
     else
         djui_hud_set_font(FONT_MENU)
         djui_hud_print_text(list_to_generate,140,100,0.2)
+    end
+end
+
+local function render_header(headerNum,xOffset,yOffset)
+    header = load_header(headerNum)
+    if not header then return end
+    for _,v in pairs(header) do
+        if v.x then
+            v.x = v.x * pt * scale
+            v.y = v.y * rowHeight * scale
+        end
+        value_handler[v.type](v,xOffset,yOffset)
     end
 end
 
@@ -116,6 +125,7 @@ local function on_hud_render()
     if current_page < star_check_max_pages then
         render_page(current_page+1,right)
     end
+    render_header(current_page,djui_hud_get_screen_width()/2 - 5*scale*pt,rowHeight*6 + rowHeight*scale)
 end
 
 ---@param m MarioState
