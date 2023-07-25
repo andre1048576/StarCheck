@@ -1,4 +1,3 @@
-
 _G.star_check_layouts = {}
 local function format_number(number)
     local string = tostring(number)
@@ -27,31 +26,27 @@ local function vanilla_layout_page_2()
     for i = COURSE_BITDW,COURSE_BITS do
         local y =  2
         table.insert(layout,{type = "font",font = FONT_MENU})
+        completed_color = nil
         if key_checks[i] and save_file_get_flags() & key_checks[i] ~= 0 then
-            table.insert(layout,{type = "color",r = 0, g = 255,b = 0, a = 255})
-        else
-            table.insert(layout,{type = "color",r = 255, g = 255,b = 255, a = 255})
+            completed_color = {r = 0,b = 0}
         end
-        table.insert(layout,{type = "text",text = "B" .. i-COURSE_BITDW+1,x = 3*(i-COURSE_BITDW),y = y})
+        table.insert(layout,{type = "text",text = "B" .. i-COURSE_BITDW+1,x = 3*(i-COURSE_BITDW),y = y,color = completed_color})
         table.insert(layout,{type = "font",font = FONT_HUD})
-        table.insert(layout,{type = "color",r = 255, g = 255,b = 255, a = 255})
         table.insert(layout,{type = "star",course = i,star_num = 0,x = 3*(i-COURSE_BITDW),y = y + 1})
     end
     cap_text = {[COURSE_COTMC] = "MC",[COURSE_TOTWC] = "WC",[COURSE_VCUTM] = "VC"}
     cap_checks = {[COURSE_COTMC] = SAVE_FLAG_HAVE_METAL_CAP,[COURSE_TOTWC] = SAVE_FLAG_HAVE_WING_CAP,[COURSE_VCUTM] = SAVE_FLAG_HAVE_VANISH_CAP}
-    cap_colors = {[COURSE_COTMC] = {type = "color", r = 0, g = 255, b = 0, a = 255},[COURSE_TOTWC] = {type = "color", r = 255, g = 0, b = 0, a = 255},[COURSE_VCUTM] = {type = "color", r = 0, g = 0, b = 255, a = 255}}
+    cap_colors = {[COURSE_COTMC] = {r = 0, b = 0},[COURSE_TOTWC] = {g = 0, b = 0},[COURSE_VCUTM] = {r = 0, g = 0}}
     for i = COURSE_COTMC, COURSE_VCUTM do
         local y =  5
-        local x = 3*(i-COURSE_COTMC) 
+        local x = 3*(i-COURSE_COTMC)
+        completed_color = nil
         if save_file_get_flags() & cap_checks[i] ~= 0 then
-            table.insert(layout,cap_colors[i])
-        else
-            table.insert(layout,{type = "color",r = 255, g = 255,b = 255, a = 255})
+            completed_color = cap_colors[i]
         end
         table.insert(layout,{type = "font",font = FONT_MENU})
-        table.insert(layout,{type = "text",text = cap_text[i],x = x,y = y})
+        table.insert(layout,{type = "text",text = cap_text[i],x = x,y = y,color = completed_color})
         table.insert(layout,{type = "font",font = FONT_HUD})
-        table.insert(layout,{type = "color",r = 255, g = 255,b = 255, a = 255})
         table.insert(layout,{type = "star",course = i,star_num = 0,x = x,y = y + 1})
     end
 

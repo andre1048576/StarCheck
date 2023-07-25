@@ -17,18 +17,39 @@ local function change_scale(msg)
     scale = num/100 * 6
     return true
 end
+---@param color table
+local function color_defaults(color)
+    if not color.r then
+        color.r = 255
+    end
+    if not color.g then
+        color.g = 255
+    end
+    if not color.b then
+        color.b = 255
+    end
+    if not color.a then
+        color.a = 255
+    end
+    return color
+end
 
 function set_max_pages(pages)
     star_check_max_pages = pages
 end
 
 local function render_text(v,xOffset)
+    if v.color then
+        c = color_defaults(v.color)
+        djui_hud_set_color(c.r,c.g,c.b,c.a)
+    end
     --font_menu should be smaller than the rest
     if curr_font == FONT_MENU then
         djui_hud_print_text(v.text,v.x + xOffset,v.y,scale/3)
     else
         djui_hud_print_text(v.text,v.x + xOffset,v.y,scale)
     end
+    djui_hud_set_color(curr_color.r,curr_color.g,curr_color.b,curr_color.a)
 end
 
 local function render_star(v,xOffset)
@@ -46,6 +67,7 @@ local function render_font(v)
 end
 
 local function render_color(v)
+    curr_color = color_defaults(v)
     djui_hud_set_color(v.r,v.g,v.b,v.a)
 end
 
@@ -85,6 +107,7 @@ local function on_hud_render()
 
     djui_hud_set_resolution(RESOLUTION_DJUI)
     curr_font = FONT_HUD
+    curr_color = {a = 255,r = 255, g = 255, b = 255}
     djui_hud_set_font(curr_font)
     left = 20
     right = djui_hud_get_screen_width() - 10*15*scale
