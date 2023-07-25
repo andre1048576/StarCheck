@@ -3,7 +3,7 @@
 
 local current_page = 1
 local star_check_max_pages = -1
-local STAR_CHECK_SCALE = 0.75
+local scale = 0.75 * 6
 local pt = 15
 local rowHeight = 19
 local function change_scale(msg) 
@@ -14,7 +14,7 @@ local function change_scale(msg)
     if num < 1 or num > 100 then
         return false
     end
-    STAR_CHECK_SCALE = num/100
+    scale = num/100 * 6
     return true
 end
 
@@ -25,18 +25,18 @@ end
 local function render_text(v,xOffset)
     --font_menu should be smaller than the rest
     if curr_font == FONT_MENU then
-        djui_hud_print_text(v.text,v.x * scale + xOffset,v.y * scale,scale/3)
+        djui_hud_print_text(v.text,v.x + xOffset,v.y,scale/3)
     else
-        djui_hud_print_text(v.text,v.x * scale + xOffset,v.y * scale,scale)
+        djui_hud_print_text(v.text,v.x + xOffset,v.y,scale)
     end
 end
 
 local function render_star(v,xOffset)
     local starFlags = save_file_get_star_flags(get_current_save_file_num() - 1, v.course - 1)
     if (starFlags & (1 << v.star_num) ~= 0) then
-        djui_hud_render_texture(gTextures.star, xOffset + v.x * scale, v.y * scale, scale, scale)
+        djui_hud_render_texture(gTextures.star, xOffset + v.x, v.y, scale, scale)
     else
-        djui_hud_print_text("x", v.x * scale + xOffset, v.y * scale, scale)
+        djui_hud_print_text("x", v.x + xOffset, v.y, scale)
     end
 end
 
@@ -49,17 +49,22 @@ local function render_color(v)
     djui_hud_set_color(v.r,v.g,v.b,v.a)
 end
 
-value_handler = {text = render_text,star = render_star,font = render_font,color = render_color}
+local function render_rect(v)
+    v.width = v.width * pt * scale
+    v.height = v.height * rowHeight * scale
+    djui_hud_render_rect(v.x, v.y,v.width,v.height)
+end
+
+value_handler = {text = render_text,star = render_star,font = render_font,color = render_color,rect = render_rect}
 
 local function render_page(pageNum,xOffset)
     list_to_generate = load_format(pageNum)
-    scale = STAR_CHECK_SCALE
     if type(list_to_generate) == "table" then
         for _,v in pairs(list_to_generate) do
             --has coordinates, so multiply them by their grid sizes
             if v.x then
-                v.x = v.x * pt
-                v.y = v.y * rowHeight
+                v.x = v.x * pt * scale
+                v.y = v.y * rowHeight * scale
             end
             value_handler[v.type](v,xOffset)
         end
@@ -67,7 +72,7 @@ local function render_page(pageNum,xOffset)
             djui_hud_set_font(FONT_MENU)
             msg = "<- Page " .. current_page .. " ->"
             textScale = scale/3
-            djui_hud_print_text(msg,djui_hud_get_screen_width()/2 - djui_hud_measure_text(msg)*textScale/2,rowHeight,textScale)
+            djui_hud_print_text(msg,djui_hud_get_screen_width()/2 - djui_hud_measure_text(msg)*textScale/2,rowHeight * 6,textScale)
         end
     else
         djui_hud_set_font(FONT_MENU)
@@ -78,17 +83,18 @@ end
 local function on_hud_render()
     if not is_game_paused() then confirm = 0 return end
 
-    djui_hud_set_resolution(RESOLUTION_N64)
+    djui_hud_set_resolution(RESOLUTION_DJUI)
     curr_font = FONT_HUD
     djui_hud_set_font(curr_font)
-    left = 10
-    right = djui_hud_get_screen_width() - 10*15*STAR_CHECK_SCALE
+    left = 20
+    right = djui_hud_get_screen_width() - 10*15*scale
     djui_hud_set_color(255, 255, 255, 255)
     render_page(current_page,left)
     if current_page < star_check_max_pages then
         render_page(current_page+1,right)
     end
 end
+
 ---@param m MarioState
 local function page_control(m)
     if not is_game_paused() then confirm = 0 return end
