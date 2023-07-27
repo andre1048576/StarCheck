@@ -48,7 +48,7 @@ local function render_text(v,xOffset,yOffset)
     end
     if v.center then
         xOffset = xOffset - (djui_hud_measure_text(v.text)/2 * used_scale)
-    elseif v.right_aligned then
+    elseif v.right_align then
         xOffset = xOffset - (djui_hud_measure_text(v.text) * used_scale)
     end
     djui_hud_print_text(v.text,v.x + xOffset,v.y + yOffset,used_scale)
@@ -59,7 +59,7 @@ local function render_star(v,xOffset, yOffset)
     local starFlags = save_file_get_star_flags(get_current_save_file_num() - 1, v.course - 1)
     if v.center then
         xOffset = xOffset - gTextures.star.width/2*scale
-    elseif v.right_aligned then
+    elseif v.right_align then
         xOffset = xOffset - gTextures.star.width*scale
     end
     if (starFlags & (1 << v.star_num) ~= 0) then
@@ -73,7 +73,7 @@ local function render_texture(v,xOffset,yOffset)
     texture = get_texture_info(v.texture)
     if v.center then
         xOffset = xOffset - texture.width/2*scale
-    elseif v.right_aligned then
+    elseif v.right_align then
         xOffset = xOffset - texture.width*scale
     end
     v.scaleX = v.scaleX or 1
