@@ -106,6 +106,7 @@ function load_pages(pageNum)
         set_max_pages(2)
         return generate_vanilla_layout(pageNum)
     elseif star_check_layouts[romhack] then
+        set_double_flip(star_check_layouts[romhack].double_flip)
         set_max_pages(star_check_layouts[romhack].page_count)
         return star_check_layouts[romhack].pages(pageNum)
     else
