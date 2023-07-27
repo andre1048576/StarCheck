@@ -70,9 +70,15 @@ local function render_star(v,xOffset, yOffset)
 end
 
 local function render_texture(v,xOffset,yOffset)
+    texture = get_texture_info(v.texture)
+    if v.center then
+        xOffset = xOffset - texture.width/2*scale
+    elseif v.right_aligned then
+        xOffset = xOffset - texture.width*scale
+    end
     v.scaleX = v.scaleX or 1
     v.scaleY = v.scaleY or 1
-    djui_hud_render_texture(get_texture_info(v.texture),v.x + xOffset,v.y + yOffset,scale * v.scaleX,scale * v.scaleY)
+    djui_hud_render_texture(texture,v.x + xOffset,v.y + yOffset,scale * v.scaleX,scale * v.scaleY)
 end
 
 local function render_font(v)
@@ -100,29 +106,24 @@ value_handler = {text = render_text,star = render_star,font = render_font,color 
 
 local function render_page(pageNum,xOffset)
     list_to_generate = load_pages(pageNum)
-    if type(list_to_generate) == "table" then
-        for _,v in pairs(list_to_generate) do
-            --has coordinates, so multiply them by their grid sizes
-            if v.x then
-                v.x = v.x * pt * scale
-                v.y = v.y * rowHeight * scale
-            end
-            value_handler[v.type](v,xOffset,0)
+    for _,v in pairs(list_to_generate) do
+        --has coordinates, so multiply them by their grid sizes
+        if v.x then
+            v.x = v.x * pt * scale
+            v.y = v.y * rowHeight * scale
         end
-        if star_check_max_pages > 2 then
-            djui_hud_set_font(FONT_MENU)
-            local msg
-            if page_increment == 2 then
-                msg = "<- Page " .. (current_page+1)//2 .. " ->"
-            else
-                msg = "<- Page " .. current_page .. " ->"
-            end
-            textScale = scale/3
-            djui_hud_print_text(msg,djui_hud_get_screen_width()/2 - djui_hud_measure_text(msg)*textScale/2,100 - rowHeight*scale,textScale)
-        end
-    else
+        value_handler[v.type](v,xOffset,0)
+    end
+    if star_check_max_pages > 2 then
         djui_hud_set_font(FONT_MENU)
-        djui_hud_print_text(list_to_generate,140,100,0.2)
+        local msg
+        if page_increment == 2 then
+            msg = "<- Page " .. (current_page+1)//2 .. " ->"
+        else
+            msg = "<- Page " .. current_page .. " ->"
+        end
+        textScale = scale/3
+        djui_hud_print_text(msg,djui_hud_get_screen_width()/2 - djui_hud_measure_text(msg)*textScale/2,100 - rowHeight*scale,textScale)
     end
 end
 
