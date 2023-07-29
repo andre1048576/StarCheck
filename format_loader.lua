@@ -26,26 +26,30 @@ local function vanilla_layout_page_2()
     for i = COURSE_BITDW,COURSE_BITS do
         local y =  2
         table.insert(layout,{type = "font",font = FONT_MENU})
-        completed_color = nil
-        if key_checks[i] and save_file_get_flags() & key_checks[i] ~= 0 then
-            completed_color = {r = 0,b = 0}
+        if i ~= COURSE_BITS then
+            icon = "key_uncollected"
+            if save_file_get_flags() & key_checks[i] ~= 0 then
+                icon = "key_collected"
+            end
+            table.insert(layout,{type = "texture",texture = icon,x = 3*(i-COURSE_BITDW)+1,y = y+1})
         end
-        table.insert(layout,{type = "text",text = "B" .. i-COURSE_BITDW+1,x = 3*(i-COURSE_BITDW),y = y,color = completed_color})
+        table.insert(layout,{type = "text",text = "B" .. i-COURSE_BITDW+1,x = 3*(i-COURSE_BITDW),y = y})
         table.insert(layout,{type = "font",font = FONT_HUD})
         table.insert(layout,{type = "star",course = i,star_num = 0,x = 3*(i-COURSE_BITDW),y = y + 1})
     end
     cap_text = {[COURSE_COTMC] = "MC",[COURSE_TOTWC] = "WC",[COURSE_VCUTM] = "VC"}
     cap_checks = {[COURSE_COTMC] = SAVE_FLAG_HAVE_METAL_CAP,[COURSE_TOTWC] = SAVE_FLAG_HAVE_WING_CAP,[COURSE_VCUTM] = SAVE_FLAG_HAVE_VANISH_CAP}
-    cap_colors = {[COURSE_COTMC] = {r = 0, b = 0},[COURSE_TOTWC] = {g = 0, b = 0},[COURSE_VCUTM] = {r = 0, g = 0}}
+    cap_colors = {[COURSE_COTMC] = "green",[COURSE_TOTWC] = "red",[COURSE_VCUTM] = "blue"}
     for i = COURSE_COTMC, COURSE_VCUTM do
         local y =  5
         local x = 3*(i-COURSE_COTMC)
-        completed_color = nil
+        icon = cap_colors[i] .. "_switch_unpressed"
         if save_file_get_flags() & cap_checks[i] ~= 0 then
-            completed_color = cap_colors[i]
+            icon = cap_colors[i] .. "_switch_pressed"
         end
+        table.insert(layout,{type = "texture",texture = icon,x = x+1,y = y+1})
         table.insert(layout,{type = "font",font = FONT_MENU})
-        table.insert(layout,{type = "text",text = cap_text[i],x = x,y = y,color = completed_color})
+        table.insert(layout,{type = "text",text = cap_text[i],x = x,y = y})
         table.insert(layout,{type = "font",font = FONT_HUD})
         table.insert(layout,{type = "star",course = i,star_num = 0,x = x,y = y + 1})
     end
@@ -126,6 +130,12 @@ local function default_layout_page_2()
             end
             table.insert(layout,{type = "texture",texture = icon,x = -1,y = adj_i})
         end
+    end
+    table.insert(layout,{type = "font",font = FONT_MENU})
+        table.insert(layout,{type = "text",text = "NO",x = 0,y = 12})
+    table.insert(layout,{type = "font",font = FONT_HUD})
+    for s = 0,6 do
+        table.insert(layout,{type = "star",course = LEVEL_NONE,star_num = s,x = s+2,y = 12})
     end
     return layout
 end

@@ -45,6 +45,7 @@ local function render_text(v,xOffset,yOffset)
     used_scale = scale
     if curr_font == FONT_MENU then
         used_scale = scale/3
+        yOffset = yOffset - rowHeight*scale/8
     end
     if v.center then
         xOffset = xOffset - (djui_hud_measure_text(v.text)/2 * used_scale)
