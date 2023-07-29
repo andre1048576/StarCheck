@@ -13,7 +13,7 @@ local function vanilla_layout_page_1()
         local y =  i
         table.insert(layout,{type = "text",text = format_number(i),x = 0, y = y})
         for s = 0,6 do
-            local x = (s+2) 
+            local x = (s+2)
             table.insert(layout,{type = "star",course = i,star_num = s,x = x,y = y})
         end
     end
@@ -171,6 +171,12 @@ function load_pages(pageNum)
         set_max_pages(star_check_layouts[romhack].page_count)
         return star_check_layouts[romhack].pages(pageNum)
     else
+        s = ""
+        for i,_ in pairs(star_check_layouts) do
+            s = i .. " " .. s
+        end
+        djui_chat_message_create(s)
+        --]]
         set_max_pages(2)
         return generate_default_layout(pageNum)
     end
