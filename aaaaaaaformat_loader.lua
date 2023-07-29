@@ -171,16 +171,9 @@ function load_pages(pageNum)
         set_max_pages(star_check_layouts[romhack].page_count)
         return star_check_layouts[romhack].pages(pageNum)
     else
-        s = ""
-        for i,_ in pairs(star_check_layouts) do
-            s = i .. " " .. s
-        end
-        djui_chat_message_create(s)
-        --]]
         set_max_pages(2)
         return generate_default_layout(pageNum)
     end
-    --]]
 end
 
 function load_header(headerNum)
