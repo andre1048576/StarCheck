@@ -131,6 +131,12 @@ local function default_layout_page_2()
             table.insert(layout,{type = "texture",texture = icon,x = -1,y = adj_i})
         end
     end
+    table.insert(layout,{type = "font",font = FONT_MENU})
+        table.insert(layout,{type = "text",text = "NO",x = 0,y = 12})
+    table.insert(layout,{type = "font",font = FONT_HUD})
+    for s = 0,6 do
+        table.insert(layout,{type = "star",course = LEVEL_NONE,star_num = s,x = s+2,y = 12})
+    end
     return layout
 end
 local pages = {default_layout_page_1,default_layout_page_2}
