@@ -4,7 +4,9 @@
 local current_page = 1
 local star_check_max_pages = -1
 local page_increment = 1
-local scale = 0.75 * 6
+local scale = tonumber(mod_storage_load("scale")) or 75
+scale = scale/100
+
 local pt = 15
 local rowHeight = 19
 local function change_scale(msg)
@@ -15,7 +17,8 @@ local function change_scale(msg)
     if num < 1 or num > 100 then
         return false
     end
-    scale = num/100 * 6
+    mod_storage_save("scale",num .. "")
+    scale = num/100
     return true
 end
 ---@param color table
@@ -70,6 +73,54 @@ local function render_star(v,xOffset, yOffset)
     end
 end
 
+local function render_cap_switch(v,xOffset,yOffset)
+    if v.pressed == nil then
+        --attempt to add a vanilla value
+        if v.switch_color == "red" then
+            v.pressed = save_file_get_flags() & SAVE_FLAG_HAVE_WING_CAP ~= 0
+        elseif v.switch_color == "blue" then
+            v.pressed = save_file_get_flags() & SAVE_FLAG_HAVE_VANISH_CAP ~= 0
+        elseif v.switch_color == "green" then
+            v.pressed = save_file_get_flags() & SAVE_FLAG_HAVE_METAL_CAP ~= 0
+        else
+            --if you make it here the switch will always appear unpressed
+        end
+    end
+    switch_string = v.switch_color .. "_switch_unpressed"
+    if v.pressed then
+        switch_string = v.switch_color .. "_switch_pressed"
+    end
+    cap_texture = get_texture_info(switch_string)
+    if v.center then
+        xOffset = xOffset - cap_texture.width/2*scale
+    elseif v.right_align then
+        xOffset = xOffset - cap_texture.width*scale
+    end
+    
+    djui_hud_render_texture(cap_texture,v.x + xOffset,v.y + yOffset,scale,scale)
+end
+
+local function render_key(v,xOffset,yOffset)
+    if v.collected == nil then
+        if v.key_num == 1 then
+            v.collected = save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_1 | SAVE_FLAG_UNLOCKED_BASEMENT_DOOR) ~= 0
+        elseif v.key_num == 2 then
+            v.collected = save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR) ~= 0
+        end
+    end
+    key_string = "key" .. v.key_num .. "_uncollected"
+    if v.collected then
+        key_string = "key" .. v.key_num .. "_collected"
+    end
+    key_texture = get_texture_info(key_string)
+    if v.center then
+        xOffset = xOffset - key_texture.width/2*scale
+    elseif v.right_align then
+        xOffset = xOffset - key_texture.width*scale
+    end
+    djui_hud_render_texture(key_texture,v.x + xOffset,v.y + yOffset,scale,scale)
+end
+
 local function render_texture(v,xOffset,yOffset)
     texture = get_texture_info(v.texture)
     if v.center then
@@ -103,7 +154,7 @@ local function render_rect(v,xOffset,yOffset)
     djui_hud_set_color(curr_color.r,curr_color.g,curr_color.b,curr_color.a)
 end
 
-value_handler = {text = render_text,star = render_star,font = render_font,color = render_color,rect = render_rect,texture = render_texture}
+value_handler = {text = render_text,star = render_star,font = render_font,color = render_color,rect = render_rect,texture = render_texture,key = render_key,cap_switch = render_cap_switch}
 
 local function render_page(pageNum,xOffset)
     list_to_generate = load_pages(pageNum)
@@ -143,11 +194,11 @@ end
 local function on_hud_render()
     if not is_game_paused() then confirm = 0 return end
 
-    djui_hud_set_resolution(RESOLUTION_DJUI)
+    djui_hud_set_resolution(RESOLUTION_N64)
     curr_font = FONT_HUD
     curr_color = {a = 255,r = 255, g = 255, b = 255}
     djui_hud_set_font(curr_font)
-    left = 20
+    left = 20/6
     right = djui_hud_get_screen_width() - 10*pt*scale
     djui_hud_set_color(255, 255, 255, 255)
     render_page(current_page,left)

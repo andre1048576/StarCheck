@@ -13,7 +13,7 @@ local function vanilla_layout_page_1()
         local y =  i
         table.insert(layout,{type = "text",text = format_number(i),x = 0, y = y})
         for s = 0,6 do
-            local x = (s+2) 
+            local x = (s+2)
             table.insert(layout,{type = "star",course = i,star_num = s,x = x,y = y})
         end
     end
@@ -27,11 +27,7 @@ local function vanilla_layout_page_2()
         local y =  2
         table.insert(layout,{type = "font",font = FONT_MENU})
         if i ~= COURSE_BITS then
-            icon = "key_uncollected"
-            if save_file_get_flags() & key_checks[i] ~= 0 then
-                icon = "key_collected"
-            end
-            table.insert(layout,{type = "texture",texture = icon,x = 3*(i-COURSE_BITDW)+1,y = y+1})
+            table.insert(layout,{type = "key",key_num = i-COURSE_BITDW+1,x=3*(i-COURSE_BITDW)+1,y=y+1})
         end
         table.insert(layout,{type = "text",text = "B" .. i-COURSE_BITDW+1,x = 3*(i-COURSE_BITDW),y = y})
         table.insert(layout,{type = "font",font = FONT_HUD})
@@ -43,11 +39,7 @@ local function vanilla_layout_page_2()
     for i = COURSE_COTMC, COURSE_VCUTM do
         local y =  5
         local x = 3*(i-COURSE_COTMC)
-        icon = cap_colors[i] .. "_switch_unpressed"
-        if save_file_get_flags() & cap_checks[i] ~= 0 then
-            icon = cap_colors[i] .. "_switch_pressed"
-        end
-        table.insert(layout,{type = "texture",texture = icon,x = x+1,y = y+1})
+        table.insert(layout,{type = "cap_switch",switch_color = cap_colors[i],x = x+1,y = y+1})
         table.insert(layout,{type = "font",font = FONT_MENU})
         table.insert(layout,{type = "text",text = cap_text[i],x = x,y = y})
         table.insert(layout,{type = "font",font = FONT_HUD})
@@ -105,7 +97,7 @@ end
 local function default_layout_page_2()
     layout = {}
     key_checks = {[COURSE_BITDW] = SAVE_FLAG_HAVE_KEY_1 | SAVE_FLAG_UNLOCKED_BASEMENT_DOOR, [COURSE_BITFS] = SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR}
-    switch_names = {[COURSE_COTMC] = "green_",[COURSE_TOTWC] = "red_",[COURSE_VCUTM] = "blue_"}
+    switch_names = {[COURSE_COTMC] = "green",[COURSE_TOTWC] = "red",[COURSE_VCUTM] = "blue"}
     cap_checks = {[COURSE_COTMC] = SAVE_FLAG_HAVE_METAL_CAP,[COURSE_TOTWC] = SAVE_FLAG_HAVE_WING_CAP,[COURSE_VCUTM] = SAVE_FLAG_HAVE_VANISH_CAP}
     course_names = {"B1","B2","B3","SS","MC","WC","VC","WM","SA","CE","EN"}
     for i = COURSE_BITDW,COURSE_END do
@@ -117,18 +109,10 @@ local function default_layout_page_2()
             table.insert(layout,{type = "star",course = i,star_num = s,x = s+2,y = adj_i})
         end
         if i <= COURSE_BITFS then
-            icon = "key_uncollected"
-            if key_checks[i] and (save_file_get_flags() & key_checks[i]) ~= 0 then
-                icon = "key_collected"
-            end
-            table.insert(layout,{type = "texture",texture = icon,x = -1,y = adj_i})
+            table.insert(layout,{type = "key",key_num = i-COURSE_BITDW+1,x=-1,y=adj_i})
         end
         if i >= COURSE_COTMC and i <= COURSE_VCUTM then
-            icon = switch_names[i] .. "switch_unpressed"
-            if save_file_get_flags() & cap_checks[i] ~= 0 then
-                icon = switch_names[i] .. "switch_pressed"
-            end
-            table.insert(layout,{type = "texture",texture = icon,x = -1,y = adj_i})
+            table.insert(layout,{type = "cap_switch",switch_color = switch_names[i],x = -1,y = adj_i})
         end
     end
     table.insert(layout,{type = "font",font = FONT_MENU})
@@ -174,7 +158,6 @@ function load_pages(pageNum)
         set_max_pages(2)
         return generate_default_layout(pageNum)
     end
-    --]]
 end
 
 function load_header(headerNum)
