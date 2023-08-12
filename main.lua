@@ -66,11 +66,13 @@ local function render_star(v,xOffset, yOffset)
     elseif v.right_align then
         xOffset = xOffset - gTextures.star.width*scale
     end
+    djui_hud_set_font(FONT_HUD)
     if (starFlags & (1 << v.star_num) ~= 0) then
         djui_hud_render_texture(gTextures.star, xOffset + v.x, v.y + yOffset, scale, scale)
     else
         djui_hud_print_text("x", v.x + xOffset, v.y + yOffset, scale)
     end
+    djui_hud_set_font(curr_font)
 end
 
 local function render_cap_switch(v,xOffset,yOffset)
