@@ -192,7 +192,7 @@ local function render_header(headerNum,xOffset,yOffset)
 end
 
 local function on_hud_render()
-    if not is_game_paused() then confirm = 0 return end
+    if not is_game_paused() then return end
 
     djui_hud_set_resolution(RESOLUTION_N64)
     curr_font = FONT_HUD
@@ -210,7 +210,7 @@ end
 
 ---@param m MarioState
 local function page_control(m)
-    if not is_game_paused() then confirm = 0 return end
+    if not is_game_paused() then return end
     if star_check_max_pages <= 2 then return end
     if m.controller.buttonPressed & L_JPAD ~= 0 then
         --if you would underflow
