@@ -34,6 +34,7 @@ function set_max_pages(pages)
     star_check_max_pages = pages
 end
 
+---@param double_flip boolean?
 function set_double_flip(double_flip)
     if double_flip then
         page_increment = 2
@@ -148,6 +149,11 @@ local function render_rect(v,xOffset,yOffset)
     if v.color then
         c = color_defaults(v.color)
         djui_hud_set_color(c.r,c.g,c.b,c.a)
+    end
+    if v.center then
+        xOffset = xOffset - v.width/2*scale
+    elseif v.right_align then
+        xOffset = xOffset - v.width*scale
     end
     v.width = v.width * pt * scale
     v.height = v.height * rowHeight * scale
