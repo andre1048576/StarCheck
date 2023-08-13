@@ -2,6 +2,23 @@
 ---@type table<string,Template>
 _G.star_check_layouts = {}
 
+
+---@type string
+local cached_romhack
+
+function find_romhack()
+    if not cached_romhack then
+        for _,mods in pairs(gActiveMods) do
+            if mods.incompatible == "romhack" then
+                cached_romhack = mods.name
+            end
+        end
+    end
+    return cached_romhack
+end
+
+find_romhack()
+
 local function format_number(number)
     local string = tostring(number)
     if number < 10 then
@@ -189,19 +206,7 @@ end
 --#endregion layout insertion code
 
 
----@type string
-local cached_romhack
 
-function find_romhack()
-    if not cached_romhack then
-        for _,mods in pairs(gActiveMods) do
-            if mods.incompatible == "romhack" then
-                cached_romhack = mods.name
-            end
-        end
-    end
-    return cached_romhack
-end
 
 ---@return Configuration[]
 function load_pages(pageNum)
