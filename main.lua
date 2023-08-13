@@ -98,7 +98,6 @@ local function render_cap_switch(v,xOffset,yOffset)
     elseif v.right_align then
         xOffset = xOffset - cap_texture.width*scale
     end
-    
     djui_hud_render_texture(cap_texture,v.x + xOffset,v.y + yOffset,scale,scale)
 end
 
@@ -197,7 +196,7 @@ local function on_hud_render()
     if not is_game_paused() then return end
 
     djui_hud_set_resolution(RESOLUTION_N64)
-    curr_font = FONT_HUD
+    curr_font = FONT_MENU
     curr_color = {a = 255,r = 255, g = 255, b = 255}
     djui_hud_set_font(curr_font)
     left = 20/6
