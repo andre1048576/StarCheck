@@ -78,7 +78,7 @@ end
 
 local function render_cap_switch(v,xOffset,yOffset)
     if v.pressed == nil then
-        --attempt to add a vanilla value
+        --attempt to add vanilla defaults
         if v.switch_color == "red" then
             v.pressed = save_file_get_flags() & SAVE_FLAG_HAVE_WING_CAP ~= 0
             v.switch_color = color_defaults({g = 0,b = 0})
