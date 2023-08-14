@@ -12,9 +12,9 @@ end
 local function template_layout_page_1()
     local layout = {}
     for i = COURSE_BOB,COURSE_RR do
-        table.insert(layout,{type = "text",text = format_number(i),x = 0, y = i})
+        add_text(layout,{text = format_number(i),x = 0,y = i})
         for s = 0,6 do
-            table.insert(layout,{type = "star",course = i,star_num = s,x = s+2,y = i})
+            add_star(layout,{course = i,star_num = s,x = s+2,y = i})
         end
     end
     return layout
@@ -30,12 +30,7 @@ local function generate_template_layout(pageNum)
     return pages[pageNum]()
 end
 
-local function on_connect()
-    ---@diagnostic disable-next-line: undefined-global
-    if star_check_layouts and mod_name ~= "template" then
-        ---@diagnostic disable-next-line: undefined-global
-        star_check_layouts[mod_name] = {pages = generate_template_layout,page_count = #pages}
-    end
-end
 
-hook_event(HOOK_ON_PLAYER_CONNECTED,on_connect)
+if star_check_layouts and mod_name ~= "template" then
+    star_check_layouts[mod_name] = {pages = generate_template_layout,page_count = #pages}
+end

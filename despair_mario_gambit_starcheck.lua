@@ -87,8 +87,7 @@ local function generate_dmg_layout(pageNum)
 end
 
 
----@diagnostic disable-next-line: undefined-global
+
 if star_check_layouts and mod_name ~= "template" then
----@diagnostic disable-next-line: undefined-global
     star_check_layouts[mod_name] = {pages = generate_dmg_layout,page_count = #pages}
 end

@@ -113,10 +113,6 @@ local function generate_sr1_5_layout(pageNum)
     return pages[pageNum]()
 end
 
-hook_event(HOOK_ON_PLAYER_CONNECTED,function ()
-    ---@diagnostic disable-next-line: undefined-global
-    if star_check_layouts and mod_name ~= "template" then
-        ---@diagnostic disable-next-line: undefined-global
-        star_check_layouts[mod_name] = {pages = generate_sr1_5_layout,page_count = #pages}
-    end
-end)
+if star_check_layouts and mod_name ~= "template" then
+    star_check_layouts[mod_name] = {pages = generate_sr1_5_layout,page_count = #pages}
+end
