@@ -3,8 +3,6 @@ local mod_name = "SM64 \\#0f52ba\\Sapphire\\#ffffff\\ v1.1"
 
 local course_names = {{"Maple","Meadow"},{"Polar","Peaks"},{"Lush","Lagoon"},{"Torchlight","Temple"},{"Supersonic","Slide"}}
 
---- "supersonic slide" "maple meadow" "polar peaks" "lush lagoon" "torchlight temple"
-
 local function sapphire_layout_page_1()
     local layout = {}
     local currY = 1
