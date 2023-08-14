@@ -81,25 +81,30 @@ local function render_cap_switch(v,xOffset,yOffset)
         --attempt to add a vanilla value
         if v.switch_color == "red" then
             v.pressed = save_file_get_flags() & SAVE_FLAG_HAVE_WING_CAP ~= 0
+            v.switch_color = color_defaults({g = 0,b = 0})
         elseif v.switch_color == "blue" then
+            v.switch_color = color_defaults({g = 0,r = 0})
             v.pressed = save_file_get_flags() & SAVE_FLAG_HAVE_VANISH_CAP ~= 0
         elseif v.switch_color == "green" then
+            v.switch_color = color_defaults({g = 0xbc,b = 0,r = 0})
             v.pressed = save_file_get_flags() & SAVE_FLAG_HAVE_METAL_CAP ~= 0
         else
             --if you make it here the switch will always appear unpressed
         end
     end
-    switch_string = v.switch_color .. "_switch_unpressed"
-    if v.pressed then
-        switch_string = v.switch_color .. "_switch_pressed"
-    end
-    cap_texture = get_texture_info(switch_string)
+    switch_string = v.pressed and "switch_pressed" or "switch_unpressed"
+    switch_color_string = v.pressed and "switch_color_pressed" or "switch_color_unpressed"
+    local cap_texture = get_texture_info(switch_string)
     if v.center then
         xOffset = xOffset - cap_texture.width/2*scale
     elseif v.right_align then
         xOffset = xOffset - cap_texture.width*scale
     end
     djui_hud_render_texture(cap_texture,v.x + xOffset,v.y + yOffset,scale,scale)
+    djui_hud_set_color(v.switch_color.r,v.switch_color.g,v.switch_color.b,v.switch_color.a)
+    cap_texture = get_texture_info(switch_color_string)
+    djui_hud_render_texture(cap_texture,v.x + xOffset,v.y + yOffset,scale,scale)
+    djui_hud_set_color(curr_color.r,curr_color.g,curr_color.b,curr_color.a)
 end
 
 local function render_key(v,xOffset,yOffset)
