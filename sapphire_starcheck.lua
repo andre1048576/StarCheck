@@ -3,7 +3,7 @@ local mod_name = "SM64 \\#0f52ba\\Sapphire\\#ffffff\\ v1.1"
 
 local course_names = {{"Maple","Meadow"},{"Polar","Peaks"},{"Lush","Lagoon"},{"Torchlight","Temple"},{"Supersonic","Slide"}}
 
-local function sapphire_layout_page_1()
+local function layout_page_1()
     local layout = {}
     local currY = 1
     for i = 1,5 do
@@ -26,12 +26,13 @@ local function sapphire_layout_page_1()
 end
 
 
-local pages = {sapphire_layout_page_1}
+local pages = {layout_page_1}
 
-local function generate_sapphire_layout(pageNum)
+local function generate_layout(pageNum)
     return pages[pageNum]()
 end
 
-if star_check_layouts and mod_name ~= "template" then
-    star_check_layouts[mod_name] = {pages = generate_sapphire_layout,page_count = #pages}
+if mod_name ~= "template" then
+    _G.star_check_layouts = _G.star_check_layouts or {}
+    star_check_layouts[mod_name] = {pages = generate_layout,page_count = #pages}
 end

@@ -3,7 +3,7 @@ local mod_name = "Super Mario Fallen Stars"
 
 local course_names = {{"Bob-omb","Harbor"},{"Skydice","Garden"},{"Moon Night","Bay"}}
 
-local function template_layout_page_1()
+local function layout_page_1()
     local layout = {}
     local cap_colors = {"blue","green","red"}
     add_text(layout,{text = "Overworld",x = 4.5,y = 1,center = true})
@@ -25,17 +25,14 @@ local function template_layout_page_1()
     return layout
 end
 
-local function template_layout_page_2()
-    local layout = {}
-    return layout
-end
-local pages = {template_layout_page_1,template_layout_page_2}
+local pages = {layout_page_1}
 
-local function generate_template_layout(pageNum)
+local function generate_layout(pageNum)
     return pages[pageNum]()
 end
 
 
-if star_check_layouts and mod_name ~= "template" then
-    star_check_layouts[mod_name] = {pages = generate_template_layout,page_count = #pages}
+if mod_name ~= "template" then
+    _G.star_check_layouts = _G.star_check_layouts or {}
+    star_check_layouts[mod_name] = {pages = generate_layout,page_count = #pages}
 end

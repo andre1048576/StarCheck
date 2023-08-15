@@ -9,7 +9,7 @@ local function format_number(number)
     return string
 end
 
-local function sr1_5_layout_page_1()
+local function layout_page_1()
     local layout = {}
     for i = COURSE_BOB,COURSE_TTM do
         local y =  i
@@ -27,7 +27,7 @@ local function sr1_5_layout_page_1()
     return layout
 end
 
-local function sr1_5_layout_page_2()
+local function layout_page_2()
     local layout = {}
     table.insert(layout,{type = "text",text = "OW1",x = 0, y = 1})
     table.insert(layout,{type = "text",text = "OW2",x = 0, y = 3})
@@ -108,11 +108,12 @@ local function sr1_5_layout_page_2()
     return layout
 end
 
-local pages = {sr1_5_layout_page_1,sr1_5_layout_page_2}
-local function generate_sr1_5_layout(pageNum)
+local pages = {layout_page_1,layout_page_2}
+local function generate_layout(pageNum)
     return pages[pageNum]()
 end
 
-if star_check_layouts and mod_name ~= "template" then
-    star_check_layouts[mod_name] = {pages = generate_sr1_5_layout,page_count = #pages}
+if mod_name ~= "template" then
+    _G.star_check_layouts = _G.star_check_layouts or {}
+    star_check_layouts[mod_name] = {pages = generate_layout,page_count = #pages}
 end

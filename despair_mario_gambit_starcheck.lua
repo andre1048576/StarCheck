@@ -8,7 +8,7 @@ local function format_number(number)
     return string
 end
 
-local function dmg_layout_page_1()
+local function layout_page_1()
     local layout = {}
     local yOffset = 0
     for i = COURSE_BOB,13 do
@@ -39,7 +39,7 @@ local function dmg_layout_page_1()
     return layout
 end
 
-local function dmg_layout_page_2()
+local function layout_page_2()
     local layout = {}
     table.insert(layout,{type = "text",text = "Overworld Stars",x = 0, y = 1})
     table.insert(layout,{type = "text",text = "OW1",x = 0, y = 2})
@@ -80,14 +80,15 @@ local function dmg_layout_page_2()
     return layout
 end
 
-local pages = {dmg_layout_page_1,dmg_layout_page_2}
+local pages = {layout_page_1,layout_page_2}
 
-local function generate_dmg_layout(pageNum)
+local function generate_layout(pageNum)
     return pages[pageNum]()
 end
 
 
 
-if star_check_layouts and mod_name ~= "template" then
-    star_check_layouts[mod_name] = {pages = generate_dmg_layout,page_count = #pages}
+if mod_name ~= "template" then
+    _G.star_check_layouts = _G.star_check_layouts or {}
+    star_check_layouts[mod_name] = {pages = generate_layout,page_count = #pages}
 end

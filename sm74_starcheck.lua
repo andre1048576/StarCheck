@@ -9,7 +9,7 @@ local function format_number(number)
     return string
 end
 
-local function sm74_layout_page_1()
+local function layout_page_1()
     local layout = {}
     for i = COURSE_BOB,COURSE_RR do
         local y =  i
@@ -23,7 +23,7 @@ local function sm74_layout_page_1()
 end
 
 
-local function sm74_layout_page_2()
+local function layout_page_2()
     local layout = {}
     table.insert(layout,{type = "text",text = "OW1",x = 0, y = 1})
     table.insert(layout,{type = "text",text = "OW2",x = 0, y = 2})
@@ -82,7 +82,7 @@ local function sm74_layout_page_2()
     return layout
 end
 
-local function sm74EE_layout_page_2()
+local function EE_layout_page_2()
     local layout = {}
     table.insert(layout,{type = "text",text = "OW1",x = 0, y = 1})
     table.insert(layout,{type = "text",text = "OW2",x = 0, y = 2})
@@ -144,10 +144,10 @@ local function sm74EE_layout_page_2()
 end
 
 
-local pages = {sm74_layout_page_1,sm74_layout_page_2}
-local pagesEE = {sm74_layout_page_1,sm74EE_layout_page_2}
+local pages = {layout_page_1,layout_page_2}
+local pagesEE = {layout_page_1,EE_layout_page_2}
 
-local function generate_sm74_layout(pageNum)
+local function generate_layout(pageNum)
     if gNetworkPlayers[0].currAreaIndex ~= 1 then
         return pagesEE[pageNum]()
     else
@@ -155,6 +155,7 @@ local function generate_sm74_layout(pageNum)
     end
 end
 
-if star_check_layouts and mod_name ~= "template" then
-    star_check_layouts[mod_name] = {pages = generate_sm74_layout,page_count = #pages}
+if mod_name ~= "template" then
+    _G.star_check_layouts = _G.star_check_layouts or {}
+    star_check_layouts[mod_name] = {pages = generate_layout,page_count = #pages}
 end

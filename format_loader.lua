@@ -1,6 +1,6 @@
 
 ---@type table<string,Template>
-_G.star_check_layouts = {}
+_G.star_check_layouts = _G.star_check_layouts or {}
 
 
 ---@type string

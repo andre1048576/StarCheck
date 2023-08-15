@@ -9,7 +9,7 @@ local function format_number(number)
     return string
 end
 
-local function template_layout_page_1()
+local function layout_page_1()
     local layout = {}
     for i = COURSE_BOB,8 do
         table.insert(layout,{type = "text",text = format_number(i),x = 0, y = i})
@@ -31,7 +31,7 @@ local function template_layout_page_1()
     return layout
 end
 
-local function template_layout_page_2()
+local function layout_page_2()
     local layout = {}
     table.insert(layout,{type = "text",text = "Bowser Courses",y = 1, x = 0})
     table.insert(layout,{type = "text",text = "B1",y = 2, x = 0})
@@ -64,12 +64,14 @@ local function template_layout_page_2()
     return layout
 end
 
-local pages = {template_layout_page_1,template_layout_page_2}
+local pages = {layout_page_1,layout_page_2}
 
-local function generate_template_layout(pageNum)
+local function generate_layout(pageNum)
     return pages[pageNum]()
 end
 
-if star_check_layouts and mod_name ~= "template" then
-    star_check_layouts[mod_name] = {pages = generate_template_layout,page_count = #pages}
+if mod_name ~= "template" then
+    _G.star_check_layouts = _G.star_check_layouts or {}
+    star_check_layouts[mod_name] = {pages = generate_layout,page_count = #pages}
 end
+
