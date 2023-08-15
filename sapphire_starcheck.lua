@@ -7,21 +7,21 @@ local function layout_page_1()
     local layout = {}
     local currY = 1
     for i = 1,5 do
-        table.insert(layout,{type = "text",text = course_names[i][1],x = 4.5, y = currY,center = true})
+        add_text(layout,{text = course_names[i][1],x = 4.5, y = currY,center = true})
         currY = currY + 1
-        table.insert(layout,{type = "text",text = course_names[i][2],x = 4.5, y = currY,center = true})
+        add_text(layout,{text = course_names[i][2],x = 4.5, y = currY,center = true})
         currY = currY + 1
         if i == 5 then break end
         for s = 0,6 do
-            table.insert(layout,{type = "star",course = i,star_num = s,x = s+1.5,y = currY,center = true})
+            add_star(layout,{course = i,star_num = s,x = s+1.5,y = currY,center = true})
         end
         currY = currY + 1
     end
-    table.insert(layout,{type = "star",course = COURSE_PSS,star_num = 0,x = 2.5,y = currY,center = true})
-    table.insert(layout,{type = "cap_switch",switch_color = "red",x = 3.5,y = currY,center = true})
-    table.insert(layout,{type = "cap_switch",switch_color = "blue",x = 4.5,y = currY,center = true})
-    table.insert(layout,{type = "cap_switch",switch_color = "green",x = 5.5,y = currY,center = true})
-    table.insert(layout,{type = "star",course = COURSE_PSS,star_num = 1,x = 6.5,y = currY,center = true})
+    add_star(layout,{course = COURSE_PSS,star_num = 0,x = 2.5,y = currY,center = true})
+    add_cap_switch(layout,{switch_color = "red",x = 3.5,y = currY,center = true})
+    add_cap_switch(layout,{switch_color = "blue",x = 4.5,y = currY,center = true})
+    add_cap_switch(layout,{switch_color = "green",x = 5.5,y = currY,center = true})
+    add_star(layout,{course = COURSE_PSS,star_num = 1,x = 6.5,y = currY,center = true})
     return layout
 end
 
