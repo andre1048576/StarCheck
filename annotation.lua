@@ -1,10 +1,10 @@
 ---@meta
 
 ---@class Template
----@field headers function?
----@field pages function
----@field page_count integer
----@field double_flip boolean?
+---@field headers function? shows additional information when a particular page is on the left on the top middle of the screen
+---@field pages function a function that returns an array of configurations aka a page
+---@field page_count integer how many pages there are
+---@field double_flip boolean? assuming there are multiple pages, should they be toggled in groups of 1 or 2
 
 
 
