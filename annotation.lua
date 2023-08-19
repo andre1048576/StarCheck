@@ -47,8 +47,8 @@
 ---@field right_align boolean? whether to align the star horizontally to be to the left of the coordinate
 
 ---@class CapSwitchRenderable : Configuration
----@field pressed boolean? whether the switch is pressed. can be omitted if a default switch color is used
----@field switch_color "blue"|"red"|"green"|{a: integer?,r: integer?,g: integer?,b:integer?} which switch this is. will automatically check if it's collected and use the correct icon
+---@field pressed boolean? whether the switch is pressed. can be omitted if a string switch_color is used
+---@field switch_color "blue"|"red"|"green"|{a: integer?,r: integer?,g: integer?,b:integer?} which switch this is. if a string is used it will automatically check if it's pressed and use the correct icon
 ---@field x number x position of the cap switch in grid sizes
 ---@field y number y position of the cap switch in grid sizes
 ---@field center boolean? whether to center the cap switch horizontally on the selected coordinate
