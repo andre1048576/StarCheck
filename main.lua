@@ -34,6 +34,7 @@ function set_max_pages(pages)
     star_check_max_pages = pages
 end
 
+---@param double_flip boolean?
 function set_double_flip(double_flip)
     if double_flip then
         page_increment = 2
@@ -66,38 +67,44 @@ local function render_star(v,xOffset, yOffset)
     elseif v.right_align then
         xOffset = xOffset - gTextures.star.width*scale
     end
+    djui_hud_set_font(FONT_HUD)
     if (starFlags & (1 << v.star_num) ~= 0) then
         djui_hud_render_texture(gTextures.star, xOffset + v.x, v.y + yOffset, scale, scale)
     else
         djui_hud_print_text("x", v.x + xOffset, v.y + yOffset, scale)
     end
+    djui_hud_set_font(curr_font)
 end
 
 local function render_cap_switch(v,xOffset,yOffset)
     if v.pressed == nil then
-        --attempt to add a vanilla value
+        --attempt to add vanilla defaults
         if v.switch_color == "red" then
             v.pressed = save_file_get_flags() & SAVE_FLAG_HAVE_WING_CAP ~= 0
+            v.switch_color = color_defaults({g = 0,b = 0})
         elseif v.switch_color == "blue" then
+            v.switch_color = color_defaults({g = 0,r = 0})
             v.pressed = save_file_get_flags() & SAVE_FLAG_HAVE_VANISH_CAP ~= 0
         elseif v.switch_color == "green" then
+            v.switch_color = color_defaults({g = 0xbc,b = 0,r = 0})
             v.pressed = save_file_get_flags() & SAVE_FLAG_HAVE_METAL_CAP ~= 0
         else
             --if you make it here the switch will always appear unpressed
         end
     end
-    switch_string = v.switch_color .. "_switch_unpressed"
-    if v.pressed then
-        switch_string = v.switch_color .. "_switch_pressed"
-    end
-    cap_texture = get_texture_info(switch_string)
+    switch_string = v.pressed and "switch_pressed" or "switch_unpressed"
+    switch_color_string = v.pressed and "switch_color_pressed" or "switch_color_unpressed"
+    local cap_texture = get_texture_info(switch_string)
     if v.center then
         xOffset = xOffset - cap_texture.width/2*scale
     elseif v.right_align then
         xOffset = xOffset - cap_texture.width*scale
     end
-    
     djui_hud_render_texture(cap_texture,v.x + xOffset,v.y + yOffset,scale,scale)
+    djui_hud_set_color(v.switch_color.r,v.switch_color.g,v.switch_color.b,v.switch_color.a)
+    cap_texture = get_texture_info(switch_color_string)
+    djui_hud_render_texture(cap_texture,v.x + xOffset,v.y + yOffset,scale,scale)
+    djui_hud_set_color(curr_color.r,curr_color.g,curr_color.b,curr_color.a)
 end
 
 local function render_key(v,xOffset,yOffset)
@@ -108,9 +115,14 @@ local function render_key(v,xOffset,yOffset)
             v.collected = save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR) ~= 0
         end
     end
-    key_string = "key" .. v.key_num .. "_uncollected"
+    local key_string = "key"
+    if v.key_num ~= 0 then
+        key_string = key_string .. tonumber(v.key_num)
+    end
     if v.collected then
-        key_string = "key" .. v.key_num .. "_collected"
+        key_string = key_string .. "_collected"
+    else
+        key_string = key_string .. "_uncollected"
     end
     key_texture = get_texture_info(key_string)
     if v.center then
@@ -147,6 +159,11 @@ local function render_rect(v,xOffset,yOffset)
     if v.color then
         c = color_defaults(v.color)
         djui_hud_set_color(c.r,c.g,c.b,c.a)
+    end
+    if v.center then
+        xOffset = xOffset - v.width/2*scale
+    elseif v.right_align then
+        xOffset = xOffset - v.width*scale
     end
     v.width = v.width * pt * scale
     v.height = v.height * rowHeight * scale
@@ -192,10 +209,10 @@ local function render_header(headerNum,xOffset,yOffset)
 end
 
 local function on_hud_render()
-    if not is_game_paused() then confirm = 0 return end
+    if not is_game_paused() then return end
 
     djui_hud_set_resolution(RESOLUTION_N64)
-    curr_font = FONT_HUD
+    curr_font = FONT_MENU
     curr_color = {a = 255,r = 255, g = 255, b = 255}
     djui_hud_set_font(curr_font)
     left = 20/6
@@ -210,7 +227,7 @@ end
 
 ---@param m MarioState
 local function page_control(m)
-    if not is_game_paused() then confirm = 0 return end
+    if not is_game_paused() then return end
     if star_check_max_pages <= 2 then return end
     if m.controller.buttonPressed & L_JPAD ~= 0 then
         --if you would underflow
