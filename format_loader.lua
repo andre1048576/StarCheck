@@ -41,7 +41,6 @@ end
 
 local function vanilla_layout_page_2()
     layout = {}
-    key_checks = {[COURSE_BITDW] = SAVE_FLAG_HAVE_KEY_1 | SAVE_FLAG_UNLOCKED_BASEMENT_DOOR, [COURSE_BITFS] = SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR}
     for i = COURSE_BITDW,COURSE_BITS do
         local y =  2
         if i ~= COURSE_BITS then
