@@ -115,9 +115,14 @@ local function render_key(v,xOffset,yOffset)
             v.collected = save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR) ~= 0
         end
     end
-    key_string = "key" .. v.key_num .. "_uncollected"
+    local key_string = "key"
+    if v.key_num ~= 0 then
+        key_string = key_string .. tonumber(v.key_num)
+    end
     if v.collected then
-        key_string = "key" .. v.key_num .. "_collected"
+        key_string = key_string .. "_collected"
+    else
+        key_string = key_string .. "_uncollected"
     end
     key_texture = get_texture_info(key_string)
     if v.center then
