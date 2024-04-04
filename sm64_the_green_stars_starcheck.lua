@@ -1,5 +1,5 @@
 
-local mod_name = "SM64: The Green Stars"
+local mod_name = "coop-mods-green-stars"
 
 local function format_number(number)
     local string = tostring(number)

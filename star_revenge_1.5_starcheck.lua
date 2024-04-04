@@ -1,5 +1,5 @@
 
-local mod_name = "Star Revenge 1.5 - Star Takeover Redone"
+local mod_name = "Star_Revenge_Redone_v2.2.1"
 
 local function format_number(number)
     local string = tostring(number)

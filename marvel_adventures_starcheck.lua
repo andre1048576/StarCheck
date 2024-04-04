@@ -1,5 +1,5 @@
 
-local mod_name = "Super Mario and the Marvel Adventure"
+local mod_name = "marvel-adventure"
 
 local course_names = {{"Sunset","Shore"},{"Dusty","Desert"},{"Frostburn","Cavern"},{"Haunted","Forest"},{"Rugged","Moonbase"}}
 

@@ -1,5 +1,5 @@
 
-local mod_name = "Super Mario Fallen Stars"
+local mod_name = "fallen-stars"
 
 local course_names = {{"Bob-omb","Harbor"},{"Skydice","Garden"},{"Moon Night","Bay"}}
 

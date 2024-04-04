@@ -1,5 +1,5 @@
 
-local mod_name = "\\#ffffff\\Shining Stars"
+local mod_name = "Shining Stars"
 
 local function format_number(number)
     local string = tostring(number)

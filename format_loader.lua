@@ -10,7 +10,7 @@ function find_romhack()
     if not cached_romhack then
         for _,mods in pairs(gActiveMods) do
             if mods.incompatible == "romhack" then
-                cached_romhack = mods.name
+                cached_romhack = mods.relativePath
             end
         end
     end
