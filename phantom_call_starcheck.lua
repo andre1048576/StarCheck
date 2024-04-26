@@ -1,4 +1,4 @@
-local mod_name = "The Phantom's Call"
+local mod_name = "coop-mods-phantoms-call"
 
 local function format_number(number)
     local string = tostring(number)

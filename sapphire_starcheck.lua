@@ -1,5 +1,5 @@
 
-local mod_name = "SM64 \\#0f52ba\\Sapphire\\#ffffff\\ v1.1"
+local mod_name = "sapphire"
 
 local course_names = {{"Maple","Meadow"},{"Polar","Peaks"},{"Lush","Lagoon"},{"Torchlight","Temple"},{"Supersonic","Slide"}}
 

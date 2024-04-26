@@ -1,5 +1,5 @@
 
-local mod_name = "Super Mario 64 Moonshine"
+local mod_name = "moonshine"
 
 local function layout_page_1()
     local layout = {}

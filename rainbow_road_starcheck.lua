@@ -1,5 +1,5 @@
 
-local mod_name = "Super Mario Rainbow Road"
+local mod_name = "rainbow-road"
 
 local function format_number(number)
     local string = tostring(number)
