@@ -41,8 +41,8 @@ local function layout_page_2()
     add_star(layout,{course = COURSE_PSS,star_num = 0,x = 4,y = 10,center=true})
     add_star(layout,{course = COURSE_PSS,star_num = 1,x = 5,y = 10,center=true})
     add_text(layout,{text = "Seasonal Void",x = 4.5,y = 11,center=true})
-    add_star(layout,{course = COURSE_PSS,star_num = 0,x = 4,y = 12,center=true})
-    add_star(layout,{course = COURSE_PSS,star_num = 1,x = 5,y = 12,center=true})
+    add_star(layout,{course = COURSE_WMOTR,star_num = 0,x = 4,y = 12,center=true})
+    add_star(layout,{course = COURSE_WMOTR,star_num = 1,x = 5,y = 12,center=true})
     for i = COURSE_BITDW,COURSE_BITS do
         local y = 13
         if i < COURSE_BITS then
