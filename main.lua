@@ -6,7 +6,8 @@ local star_check_max_pages = -1
 local page_increment = 1
 local scale = tonumber(mod_storage_load("scale")) or 75
 scale = scale/100
-
+local default_visibility = mod_storage_load("default_visibility") == "true"
+local default_visibility_message_sent = false
 local pt = 15
 local rowHeight = 19
 local function change_scale(msg)
@@ -21,6 +22,13 @@ local function change_scale(msg)
     scale = num/100
     return true
 end
+
+local function toggle_default_visibility()
+    default_visibility = not default_visibility
+    mod_storage_save("default_visibility",tostring(default_visibility))
+    return true
+end
+
 ---@param color table
 local function color_defaults(color)
     color.r = color.r or 255
@@ -210,7 +218,14 @@ end
 
 local function on_hud_render()
     if not is_game_paused() then return end
-
+    if (not default_visibility) and find_romhack() and not star_check_layouts[find_romhack()] then 
+        if not default_visibility_message_sent then
+            default_visibility_message_sent = true
+            hack_name = tostring(find_romhack())
+            djui_chat_message_create("You've turned off the default layout shown because the hack `" .. hack_name .. "` has no template. You can run the sc-toggle-default command to view it again.")
+        end
+        return
+    end
     djui_hud_set_resolution(RESOLUTION_N64)
     curr_font = FONT_MENU
     curr_color = {a = 255,r = 255, g = 255, b = 255}
@@ -247,6 +262,7 @@ local function page_control(m)
 end
 
 hook_event(HOOK_ON_HUD_RENDER, on_hud_render)
-hook_chat_command('scale', "[1 - 100] - adjust the scale of star check (75 is default)", change_scale)
+hook_chat_command('sc-scale', "[1 - 100] - adjust the scale of star check (75 is default)", change_scale)
+hook_chat_command('sc-toggle-default', "- toggle whether to show star check when no template is provided", toggle_default_visibility)
 
 hook_event(HOOK_MARIO_UPDATE,page_control)
