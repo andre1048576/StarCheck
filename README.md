@@ -26,5 +26,5 @@ please note that "pause in singleplayer" in misc options breaks this mod, so you
 - SM74
 - Star Revenge 1.5
 - Star Revenge 4.5
-- Star Revenge 7.5
+- Star Revenge 7
 - Star Road
