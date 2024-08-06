@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global
 
-local mod_name = "Super Mario 74 (+EE)"
+local mod_name = "sm74"
 local function format_number(number)
     local string = tostring(number)
     if number < 10 then
