@@ -1,6 +1,6 @@
 # What are templates?
 
-Templates are how stars are displayed based on the currently loaded romhack. They consist of multiple pages and headers and specify how the pages are loaded (view sm74_starcheck's generate_sm74_layout for reference on how this can be done). Templates are added within star_check_layouts using the romhack's name as an index and have a number of parameters included.
+Templates are how stars are displayed based on the currently loaded romhack. They consist of multiple pages and headers and specify how the pages are loaded (view starcheck_sm74's generate_sm74_layout for reference on how this can be done). Templates are added within star_check_layouts using the romhack's name as an index and have a number of parameters included.
 
 parameters:  
 pages : function  
